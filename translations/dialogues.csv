@@ -1,0 +1,9 @@
+key,ru,en
+welcome_message,Добро пожаловать в пустоши!,Welcome to the wastes!
+drifter_intro,"Я — Дрифтер. Без имени, без прошлого. Только Ровер и путь вперёд.","I’m the Drifter. No name, no past. Just the Rover and the road ahead."
+rover_signal,"Сигнал пойман. Ремонт приёмника: продолжаем.","Signal acquired. Receiver repair: proceeding."
+ares_hint,"ARES зовёт. Протокол 4: Потеря сигнала.","ARES calls. Protocol 4: Signal lost."
+neon_wastes,"Neon Wastes — город в песке. Координаты ведут туда.","Neon Wastes — a city in the sand. Coordinates point there."
+enemy_alert,"Враги близко! Пескорождённые или хуже.","Enemies nearby! Sandborn or worse."
+ui_start,Начать,Start
+ui_exit,Выйти,Exit
