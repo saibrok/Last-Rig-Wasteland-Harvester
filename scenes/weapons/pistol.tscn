@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6xdfrswx22wg"]
+
+[ext_resource type="Script" uid="uid://cwrk4lef7ohi" path="res://scripts/weapons/pistol.gd" id="1_4jni1"]
+[ext_resource type="Texture2D" uid="uid://droj7g0n52v1a" path="res://assets/pistol.png" id="2_r3071"]
+
+[node name="Pistol" type="Node2D"]
+script = ExtResource("1_4jni1")
+metadata/_edit_vertical_guides_ = [16.0]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(12, 2)
+texture = ExtResource("2_r3071")
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(16, 0)
+
+[node name="Pivot" type="Marker2D" parent="."]

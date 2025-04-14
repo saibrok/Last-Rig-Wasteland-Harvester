@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmqdd5txp624j"]
+
+[ext_resource type="Script" uid="uid://chegos2nxbnmf" path="res://scripts/drifter.gd" id="1_yvqoo"]
+[ext_resource type="PackedScene" uid="uid://b6xdfrswx22wg" path="res://scenes/weapons/pistol.tscn" id="2_2ffv5"]
+
+[sub_resource type="Gradient" id="Gradient_yvqoo"]
+offsets = PackedFloat32Array(0, 0.577778, 1)
+colors = PackedColorArray(0.501961, 0.501961, 0.501961, 1, 0.501961, 0.501961, 0.501961, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2ffv5"]
+gradient = SubResource("Gradient_yvqoo")
+width = 16
+height = 24
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_n2ryv"]
+diffuse_texture = SubResource("GradientTexture2D_2ffv5")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jsr3b"]
+size = Vector2(16, 24)
+
+[node name="Drifter" type="CharacterBody2D" groups=["player"]]
+script = ExtResource("1_yvqoo")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("CanvasTexture_n2ryv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_jsr3b")
+
+[node name="Pistol" parent="." instance=ExtResource("2_2ffv5")]

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://ixe8bdycjie7"]
+
+[ext_resource type="Script" uid="uid://bgo7r5gd3ktks" path="res://scripts/combat_arena.gd" id="1_bsdi3"]
+[ext_resource type="PackedScene" uid="uid://dmqdd5txp624j" path="res://scenes/player.tscn" id="1_wa2ja"]
+[ext_resource type="PackedScene" uid="uid://puj74l3wd01l" path="res://scenes/crosshair.tscn" id="2_bsdi3"]
+
+[node name="CombatArena" type="Node2D"]
+script = ExtResource("1_bsdi3")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.180392, 0.180392, 0.180392, 1)
+
+[node name="DrifterSpawn" type="Marker2D" parent="." groups=["spawn"]]
+position = Vector2(320, 180)
+
+[node name="Player" parent="." instance=ExtResource("1_wa2ja")]
+
+[node name="Crosshair" parent="." instance=ExtResource("2_bsdi3")]
