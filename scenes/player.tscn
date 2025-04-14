@@ -139,8 +139,8 @@ script = ExtResource("1_yvqoo")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_g0fjk")
 animation = &"idle"
-frame = 4
-frame_progress = 0.610932
+frame = 2
+frame_progress = 0.755784
 
 [node name="Pistol" parent="." instance=ExtResource("2_2ffv5")]
 metadata/_edit_group_ = true
