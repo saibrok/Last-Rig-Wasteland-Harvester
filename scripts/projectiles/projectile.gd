@@ -6,8 +6,8 @@ extends Area2D
 
 func _physics_process(delta):
 	position += transform.x * speed * delta
-	var screen_size = get_viewport_rect().size
-	if position.x < 0 or position.x > screen_size.x or position.y < 0 or position.y > screen_size.y:
+	var arena_size = Vector2(1280, 720)
+	if position.x < 0 or position.x > arena_size.x or position.y < 0 or position.y > arena_size.y:
 		queue_free()
 
 func _on_body_entered(body):

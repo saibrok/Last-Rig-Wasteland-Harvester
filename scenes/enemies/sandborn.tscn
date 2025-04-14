@@ -133,6 +133,7 @@ animations = [{
 size = Vector2(20, 32)
 
 [sub_resource type="SystemFont" id="SystemFont_jnclh"]
+subpixel_positioning = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_du36p"]
 font = SubResource("SystemFont_jnclh")
