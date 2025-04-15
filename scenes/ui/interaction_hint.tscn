@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://ceeyk8hpu6y7m"]
+
+[ext_resource type="Texture2D" uid="uid://b05xxi14bnwh4" path="res://assets/button.png" id="1_0wrgi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_dqjvw"]
+
+[node name="InteractionHint" type="Node2D"]
+metadata/_edit_group_ = true
+
+[node name="ButtonSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_0wrgi")
+
+[node name="KeyLabel" type="Label" parent="."]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+text = "F"
+label_settings = SubResource("LabelSettings_dqjvw")
+horizontal_alignment = 1
+vertical_alignment = 1

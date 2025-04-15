@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://crodyj8q5778e"]
+[gd_scene load_steps=6 format=3 uid="uid://crodyj8q5778e"]
 
 [ext_resource type="Script" uid="uid://b7k45cepac1mr" path="res://scripts/rover/rover.gd" id="1_pvwuo"]
 [ext_resource type="Texture2D" uid="uid://cc4lxsh4sbs1t" path="res://assets/rover_top_down.png" id="2_v6l62"]
+[ext_resource type="Texture2D" uid="uid://b05xxi14bnwh4" path="res://assets/button.png" id="3_cdng5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m8v07"]
 size = Vector2(58.5, 64)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ao5c6"]
 
 [node name="Rover" type="StaticBody2D"]
 script = ExtResource("1_pvwuo")
@@ -14,3 +17,20 @@ texture = ExtResource("2_v6l62")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_m8v07")
+
+[node name="InteractionHint" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, -32)
+
+[node name="Sprite2D" type="Sprite2D" parent="InteractionHint"]
+texture = ExtResource("3_cdng5")
+
+[node name="Label" type="Label" parent="InteractionHint"]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 11.0
+text = "F"
+label_settings = SubResource("LabelSettings_ao5c6")
+horizontal_alignment = 1
+vertical_alignment = 1
