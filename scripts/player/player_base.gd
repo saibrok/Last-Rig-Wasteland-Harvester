@@ -1,11 +1,10 @@
 extends CharacterBody2D
 
-@export var walk_speed: float = 50.0
+@export var walk_speed: float = 150.0
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-# Границы движения игрока внутри Ровера (примерные, подстрой под спрайт)
-var min_x: float = 100.0 # Левая граница (относительно 0,0 сцены)
-var max_x: float = 540.0 # Правая граница
+var margin: float = 150
+var scene_width: float = 640
 
 func _ready():
 	if not sprite.sprite_frames.has_animation("run"):
@@ -22,7 +21,8 @@ func _physics_process(_delta):
 	move_and_slide()
 	
 	# Ограничиваем движение игрока внутри Ровера
-	position.x = clamp(position.x, min_x, max_x)
+	position.x = clamp(position.x, margin, scene_width - margin)
+	position.y = 235
 	
 	# Обновляем анимацию и поворот спрайта
 	if velocity.x != 0:

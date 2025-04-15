@@ -40,6 +40,9 @@ func _find_target():
 		else:
 			target = drifter if drifter else rover
 
+func set_target(new_target: Node2D):
+	target = new_target
+
 func take_damage(damage: float):
 	health = max(0, health - damage)
 	if health <= 0:

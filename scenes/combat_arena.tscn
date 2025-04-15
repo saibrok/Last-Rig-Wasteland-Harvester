@@ -15,7 +15,7 @@ texture = ExtResource("2_bsdi3")
 region_enabled = true
 region_rect = Rect2(0, 0, 1280, 720)
 
-[node name="Rover" parent="." instance=ExtResource("4_t4nkh")]
+[node name="Rover" parent="." groups=["rover"] instance=ExtResource("4_t4nkh")]
 position = Vector2(640, 360)
 
 [node name="PlayerSpawn" type="Marker2D" parent="." groups=["spawn"]]
