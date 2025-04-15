@@ -129,8 +129,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jnclh"]
-size = Vector2(20, 32)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jnclh"]
+radius = 9.0
 
 [sub_resource type="SystemFont" id="SystemFont_jnclh"]
 subpixel_positioning = 0
@@ -147,7 +147,7 @@ sprite_frames = SubResource("SpriteFrames_rdun8")
 animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_jnclh")
+shape = SubResource("CapsuleShape2D_jnclh")
 
 [node name="HealthLabel" type="Label" parent="."]
 offset_left = -11.0

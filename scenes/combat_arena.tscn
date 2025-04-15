@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ixe8bdycjie7"]
+[gd_scene load_steps=5 format=3 uid="uid://ixe8bdycjie7"]
 
 [ext_resource type="Script" uid="uid://bgo7r5gd3ktks" path="res://scripts/combat_arena.gd" id="1_bsdi3"]
-[ext_resource type="PackedScene" uid="uid://dmqdd5txp624j" path="res://scenes/player.tscn" id="1_wa2ja"]
+[ext_resource type="PackedScene" uid="uid://dmqdd5txp624j" path="res://scenes/player/player.tscn" id="1_wa2ja"]
 [ext_resource type="Texture2D" uid="uid://bqewp7d4ohhmc" path="res://assets/background_desert_sand.png" id="2_bsdi3"]
+[ext_resource type="PackedScene" uid="uid://crodyj8q5778e" path="res://scenes/rover/rover.tscn" id="4_t4nkh"]
 
 [node name="CombatArena" type="Node2D"]
 script = ExtResource("1_bsdi3")
@@ -14,15 +15,24 @@ texture = ExtResource("2_bsdi3")
 region_enabled = true
 region_rect = Rect2(0, 0, 1280, 720)
 
+[node name="Rover" parent="." instance=ExtResource("4_t4nkh")]
+position = Vector2(640, 360)
+
 [node name="PlayerSpawn" type="Marker2D" parent="." groups=["spawn"]]
-position = Vector2(320, 180)
+position = Vector2(640, 300)
 
 [node name="Player" parent="." instance=ExtResource("1_wa2ja")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(320, 180)
+position = Vector2(640, 360)
 limit_left = 0
 limit_top = 0
 limit_right = 1280
 limit_bottom = 720
 position_smoothing_enabled = true
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
