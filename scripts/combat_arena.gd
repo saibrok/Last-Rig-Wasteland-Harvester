@@ -4,9 +4,14 @@ extends Node2D
 @onready var sandborn_scene: PackedScene = preload("res://scenes/enemies/sandborn.tscn")
 @onready var player: Node2D = $Player
 @onready var camera: Camera2D = $Camera2D
+@onready var rover: StaticBody2D = $Rover
 @onready var spawn_timer: Timer = $SpawnTimer
 
 func _ready():
+	# Загружаем текстуру курсора
+	var cursor_texture = preload("res://assets/crosshair_32x32.png")
+	# Устанавливаем кастомный курсор (32x32, центр в середине)
+	Input.set_custom_mouse_cursor(cursor_texture, Input.CURSOR_ARROW, Vector2(16, 16))
 	
 	var background = $Background
 	if background:
@@ -26,6 +31,12 @@ func _ready():
 func _physics_process(delta):
 	if player and camera:
 		camera.global_position = player.global_position
+	
+	# Проверка нажатия F рядом с Ровером
+	if Input.is_action_just_pressed("action_interact") and rover:
+		var distance_to_rover = player.global_position.distance_to(rover.global_position)
+		if distance_to_rover < 100.0: # Радиус взаимодействия
+			get_tree().change_scene_to_file("res://scenes/rover_base.tscn")
 
 func _on_spawn_timer_timeout():
 	var sandborn = sandborn_scene.instantiate()
