@@ -1,14 +1,23 @@
+## Класс игрока для боевой арены с движением и стрельбой.
 extends CharacterBody2D
 
+## Скорость бега игрока.
 @export var run_speed: float = 100.0
+
+## Скорость ходьбы игрока (при стрельбе).
 @export var walk_speed: float = 50.0
 
+## Размер экрана для ограничения движения.
 var screen_size: Vector2
+
+## Текущая скорость игрока (бег или ходьба).
 var current_speed: float
 
+## Анимированный спрайт для отображения движения игрока.
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-func _ready():
+## Инициализирует игрока, устанавливая начальную позицию и проверяя анимации.
+func _ready() -> void:
 	screen_size = Vector2(1280, 720) # Новая арена
 	var marker: Marker2D = get_parent().get_node("PlayerSpawn")
 	if marker:
@@ -19,7 +28,9 @@ func _ready():
 	if not sprite.sprite_frames.has_animation("run") or not sprite.sprite_frames.has_animation("idle"):
 		push_error("Missing 'run' or 'idle' animation in AnimatedSprite2D")
 
-func _physics_process(_delta):
+## Обрабатывает движение, стрельбу и анимации игрока каждый физический кадр.
+## @param _delta Время, прошедшее с последнего кадра.
+func _physics_process(_delta: float) -> void:
 	var velocity = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = velocity.normalized() * current_speed
 	self.velocity = velocity

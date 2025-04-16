@@ -1,16 +1,26 @@
+## Базовый класс игрока внутри Ровера с ограниченным движением по горизонтали.
 extends CharacterBody2D
 
+## Скорость ходьбы игрока.
 @export var walk_speed: float = 150.0
+
+## Анимированный спрайт для отображения движения игрока.
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+## Отступ от краев сцены для ограничения движения.
 var margin: float = 150
+
+## Ширина сцены для ограничения движения.
 var scene_width: float = 640
 
-func _ready():
+## Проверяет наличие анимации "run" при инициализации.
+func _ready() -> void:
 	if not sprite.sprite_frames.has_animation("run"):
 		push_error("Missing 'run' animation in AnimatedSprite2D")
 
-func _physics_process(_delta):
+## Обрабатывает движение игрока и обновляет анимацию каждый физический кадр.
+## @param _delta Время, прошедшее с последнего кадра.
+func _physics_process(_delta: float) -> void:
 	var velocity = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
 		velocity.x = walk_speed

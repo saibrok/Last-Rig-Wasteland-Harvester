@@ -1,20 +1,36 @@
+## Базовый класс врага, который преследует игрока или Ровер, в зависимости от расстояния.
 class_name Enemy
 extends CharacterBody2D
 
+## Максимальное здоровье врага.
 @export var max_health: float = 100.0
+
+## Скорость ходьбы врага (медленное движение).
 @export var walk_speed: float = 40.0
+
+## Скорость бега врага (быстрое движение при большом расстоянии до цели).
 @export var run_speed: float = 80.0
+
+## Радиус обнаружения цели, определяющий, когда враг начинает преследование.
 @export var detection_range: float = 200.0
 
+## Текущее здоровье врага.
 var health: float
+
+## Цель, за которой следует враг (игрок или Ровер).
 var target: Node2D
+
+## Флаг, указывающий, бежит ли враг (true) или идёт (false).
 var is_running: bool = false
 
-func _ready():
+## Инициализирует врага, устанавливая начальное здоровье и добавляя его в группу "enemy".
+func _ready() -> void:
 	health = max_health
 	add_to_group("enemy")
 
-func _physics_process(delta):
+## Обновляет движение врага каждый физический кадр.
+## @param delta Время, прошедшее с последнего кадра.
+func _physics_process(delta: float) -> void:
 	if not target:
 		_find_target()
 		return
@@ -28,7 +44,8 @@ func _physics_process(delta):
 	velocity = direction * current_speed
 	move_and_slide()
 
-func _find_target():
+## Находит ближайшую цель (игрок или Ровер) для преследования.
+func _find_target() -> void:
 	var tree = get_tree()
 	if tree:
 		var drifter = tree.get_first_node_in_group("player")
@@ -40,13 +57,18 @@ func _find_target():
 		else:
 			target = drifter if drifter else rover
 
-func set_target(new_target: Node2D):
+## Устанавливает новую цель для преследования.
+## @param new_target Новая цель (игрок или Ровер).
+func set_target(new_target: Node2D) -> void:
 	target = new_target
 
-func take_damage(damage: float):
+## Наносит урон врагу и проверяет, не погиб ли он.
+## @param damage Количество урона.
+func take_damage(damage: float) -> void:
 	health = max(0, health - damage)
 	if health <= 0:
 		die()
 
-func die():
+## Уничтожает врага, удаляя его из сцены.
+func die() -> void:
 	queue_free()

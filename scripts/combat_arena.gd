@@ -1,14 +1,29 @@
+## Класс боевой арены, управляющий спавном врагов, камерой и взаимодействием с Ровером.
 extends Node2D
 
-@export var spawn_interval: float = 2.0 # Интервал спавна в секунд
+## Интервал между спавнами врагов в секундах.
+@export var spawn_interval: float = 2.0
+
+## Сцена врага Sandborn для спавна.
 @onready var sandborn_scene: PackedScene = preload("res://scenes/enemies/sandborn.tscn")
+
+## Ссылка на игрока.
 @onready var player: Node2D = $Player
+
+## Камера для боевой арены.
 @onready var camera: Camera2D = $Camera2D
+
+## Ссылка на Ровер.
 @onready var rover: StaticBody2D = $Rover
+
+## Таймер для спавна врагов.
 @onready var spawn_timer: Timer = $SpawnTimer
+
+## Флаг, разрешающий взаимодействие с Ровером.
 var can_interact: bool = true
 
-func _ready():
+## Инициализирует арену, настраивая GameManager, курсор, фон, таймер спавна и спавня начального врага.
+func _ready() -> void:
 	# Сохраняем ссылки в GameManager
 	GameManager.combat_arena = self
 	GameManager.player = player
@@ -39,7 +54,9 @@ func _ready():
 	sandborn.global_position = Vector2(100, 100)
 	add_child(sandborn)
 
-func _physics_process(delta):
+## Обновляет позицию камеры, следует за игроком и обрабатывает взаимодействие с Ровером.
+## @param delta Время, прошедшее с последнего кадра.
+func _physics_process(delta: float) -> void:
 	if is_visible() and player and camera:
 		camera.global_position = player.global_position
 	
@@ -63,7 +80,6 @@ func _physics_process(delta):
 				player.set_physics_process(false)
 				player.set_process(false)
 				player.set_process_input(false)
-				# Отключаем коллизии и рендеринг для игрока
 				if player.has_node("CollisionShape2D"):
 					player.get_node("CollisionShape2D").disabled = true
 				for child in player.get_children():
@@ -87,7 +103,8 @@ func _physics_process(delta):
 			var timer = get_tree().create_timer(0.2)
 			timer.timeout.connect(func(): can_interact = true)
 
-func _on_spawn_timer_timeout():
+## Спавнит врага Sandborn в случайной позиции по краям арены с учетом безопасного расстояния от игрока.
+func _on_spawn_timer_timeout() -> void:
 	if not spawn_timer:
 		print("Error: spawn_timer is null in _on_spawn_timer_timeout")
 		return
