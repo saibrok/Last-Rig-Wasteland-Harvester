@@ -26,7 +26,7 @@ var can_shoot: bool = true
 ## Узел для точки вылета снаряда.
 @onready var muzzle: Node2D = get_node_or_null("Muzzle")
 
-## Обновляет поворот оружия к курсору и обрабатывает стрельбу.
+## Обновляет поворот оружия к курсору и обрабатывает стрельбу, если боевая арена активна.
 ## @param _delta Время, прошедшее с последнего кадра.
 func _physics_process(_delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
@@ -44,10 +44,12 @@ func _physics_process(_delta: float) -> void:
 		sprite.flip_v = is_flipped
 		sprite.position.y = barrel_offset if is_flipped else -barrel_offset
 
-	if Input.is_action_pressed("action_fire"):
-		shoot(direction)
+	# Стрелять только если боевая арена активна
+	if GameManager.is_in_combat_arena:
+		if Input.is_action_pressed("action_fire"):
+			shoot(direction)
 
-## Создает снаряд и запускает его в указанном направлении.
+## Создаёт снаряд и запускает его в указанном направлении.
 ## @param direction Направление выстрела.
 func shoot(direction: Vector2) -> void:
 	if can_shoot and projectile_scene:
@@ -55,7 +57,11 @@ func shoot(direction: Vector2) -> void:
 		projectile.global_position = muzzle.global_position if muzzle else global_position
 		var spread_radians = deg_to_rad(randf_range(-spread / 2.0, spread / 2.0))
 		projectile.rotation = rotation + spread_radians
-		get_tree().current_scene.add_child(projectile)
+		# Добавляем снаряд в CombatArena
+		if GameManager.combat_arena:
+			GameManager.combat_arena.add_child(projectile)
+		else:
+			get_tree().current_scene.add_child(projectile)
 		can_shoot = false
 		var cooldown = 1.0 / fire_rate
 		await get_tree().create_timer(cooldown).timeout

@@ -28,6 +28,8 @@ func _ready() -> void:
 	GameManager.combat_arena = self
 	GameManager.player = player
 	GameManager.rover = rover
+	if not GameManager.player or not GameManager.rover:
+		print("Error: GameManager.player or GameManager.rover not initialized")
 	if camera:
 		camera.enabled = true
 	
@@ -70,7 +72,7 @@ func _physics_process(delta: float) -> void:
 			var rover_base = rover_base_scene.instantiate()
 			get_tree().root.add_child(rover_base)
 			get_tree().current_scene = rover_base
-			# Отключаем сцену полностью
+			# Отключаем сцену
 			hide()
 			set_physics_process(false)
 			set_process(false)
@@ -82,12 +84,19 @@ func _physics_process(delta: float) -> void:
 				player.set_process_input(false)
 				if player.has_node("CollisionShape2D"):
 					player.get_node("CollisionShape2D").disabled = true
+				# Отключаем процессы и видимость для всех дочерних узлов
 				for child in player.get_children():
+					child.set_physics_process(false)
+					child.set_process(false)
 					if child is Node2D:
 						child.visible = false
-			# Отключаем врагов и их коллизии
+					# Очищаем таймеры для оружия
+					if child.has_method("get_children"):
+						for grandchild in child.get_children():
+							if grandchild is Timer:
+								grandchild.stop()
+			# Отключаем видимость и коллизии врагов, но не движение
 			for enemy in get_tree().get_nodes_in_group("enemy"):
-				enemy.set_physics_process(false)
 				enemy.set_process(false)
 				if enemy.has_node("CollisionShape2D"):
 					enemy.get_node("CollisionShape2D").disabled = true
@@ -99,9 +108,16 @@ func _physics_process(delta: float) -> void:
 				spawn_timer.stop()
 			# Сбрасываем курсор
 			Input.set_custom_mouse_cursor(null)
+			# Переключаем врагов на Ровер
+			if GameManager.rover:
+				get_tree().call_group("enemy", "set_target", GameManager.rover)
+			else:
+				print("Error: GameManager.rover is null")
 			# Задержка для восстановления взаимодействия
 			var timer = get_tree().create_timer(0.2)
 			timer.timeout.connect(func(): can_interact = true)
+			# Обновляем состояние
+			GameManager.is_in_combat_arena = false
 
 ## Спавнит врага Sandborn в случайной позиции по краям арены с учетом безопасного расстояния от игрока.
 func _on_spawn_timer_timeout() -> void:
@@ -112,8 +128,8 @@ func _on_spawn_timer_timeout() -> void:
 	
 	# Случайная позиция по краям арены
 	var arena_size = Vector2(1280, 720)
-	var spawn_margin = 100.0 # Отступ от краёв
-	var player_safe_radius = 200.0 # Минимальное расстояние от игрока
+	var spawn_margin = 100.0
+	var player_safe_radius = 200.0
 	var spawn_pos = Vector2.ZERO
 	
 	# Выбираем сторону спавна (0: лево, 1: право, 2: верх, 3: низ)
@@ -136,7 +152,6 @@ func _on_spawn_timer_timeout() -> void:
 	if GameManager.player:
 		var distance_to_player = spawn_pos.distance_to(GameManager.player.global_position)
 		if distance_to_player < player_safe_radius:
-			# Корректируем позицию, если слишком близко
 			var direction = (spawn_pos - GameManager.player.global_position).normalized()
 			spawn_pos = GameManager.player.global_position + direction * player_safe_radius
 	

@@ -51,9 +51,8 @@ func _ready() -> void:
 			for child in GameManager.player.get_children():
 				if child is Node2D:
 					child.visible = false
-		# Отключаем врагов
+		# Отключаем видимость врагов
 		for enemy in get_tree().get_nodes_in_group("enemy"):
-			enemy.set_physics_process(false)
 			enemy.set_process(false)
 			if enemy.has_node("CollisionShape2D"):
 				enemy.get_node("CollisionShape2D").disabled = true
@@ -66,7 +65,10 @@ func _ready() -> void:
 	# Сбрасываем курсор
 	Input.set_custom_mouse_cursor(null)
 	# Сигналим врагам переключиться на Ровер
-	get_tree().call_group("enemy", "set_target", GameManager.rover)
+	if GameManager.rover:
+		get_tree().call_group("enemy", "set_target", GameManager.rover)
+	else:
+		print("Error: GameManager.rover is null in RoverBase")
 
 ## Обновляет видимость подсказок и обрабатывает взаимодействие игрока.
 ## @param delta Время, прошедшее с последнего кадра.
@@ -90,7 +92,10 @@ func _physics_process(delta: float) -> void:
 					GameManager.player.set_process(true)
 					if GameManager.player.has_node("CollisionShape2D"):
 						GameManager.player.get_node("CollisionShape2D").disabled = false
+					# Включаем процессы для всех дочерних узлов
 					for child in GameManager.player.get_children():
+						child.set_physics_process(true)
+						child.set_process(true)
 						if child is Node2D:
 							child.visible = true
 					var timer = get_tree().create_timer(0.2)
@@ -98,6 +103,7 @@ func _physics_process(delta: float) -> void:
 						if GameManager.player:
 							GameManager.player.set_process_input(true)
 					)
+				# Включаем врагов
 				for enemy in get_tree().get_nodes_in_group("enemy"):
 					enemy.set_physics_process(true)
 					enemy.set_process(true)
@@ -106,19 +112,25 @@ func _physics_process(delta: float) -> void:
 					for child in enemy.get_children():
 						if child is Node2D:
 							child.visible = true
+				# Запускаем спавн
 				if GameManager.combat_arena.spawn_timer:
 					GameManager.combat_arena.spawn_timer.start()
+				# Восстанавливаем курсор
 				var cursor_texture = preload("res://assets/crosshair_32x32.png")
 				Input.set_custom_mouse_cursor(cursor_texture, Input.CURSOR_ARROW, Vector2(16, 16))
+			# Переключаем половину врагов на игрока
 			var enemies = get_tree().get_nodes_in_group("enemy")
 			var switch_count = enemies.size() / 2
 			for i in range(min(switch_count, enemies.size())):
 				if enemies[i] and GameManager.player:
 					enemies[i].set_target(GameManager.player)
+			# Отключаем свою камеру и удаляем сцену
 			if camera:
 				camera.enabled = false
 			get_tree().current_scene = GameManager.combat_arena
 			queue_free()
+			# Обновляем состояние
+			GameManager.is_in_combat_arena = true
 		elif in_rest_area:
 			print("RoverBase: action_interact pressed, resting")
 			# TODO: Реализовать логику отдыха

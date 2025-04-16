@@ -56,11 +56,14 @@ func _find_target() -> void:
 			target = drifter if dist_to_drifter < dist_to_rover else rover
 		else:
 			target = drifter if drifter else rover
+		if not target:
+			print("Enemy: No target found")
 
 ## Устанавливает новую цель для преследования.
 ## @param new_target Новая цель (игрок или Ровер).
 func set_target(new_target: Node2D) -> void:
 	target = new_target
+	print("Enemy: Target set to ", new_target.name if new_target else "null")
 
 ## Наносит урон врагу и проверяет, не погиб ли он.
 ## @param damage Количество урона.
